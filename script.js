@@ -138,7 +138,6 @@ document.addEventListener('DOMContentLoaded', function() {
             if (state.audio.isDragging) {
                 state.audio.isDragging = false;
                 document.body.style.userSelect = '';
-                // Update audio position only when drag ends
                 elements.audio.player.currentTime = state.audio.dragPosition * elements.audio.player.duration;
             }
         },
@@ -159,10 +158,8 @@ document.addEventListener('DOMContentLoaded', function() {
             const rect = elements.audio.progressBar.getBoundingClientRect();
             state.audio.dragPosition = Math.min(Math.max((e.clientX - rect.left) / elements.audio.progressBar.offsetWidth, 0), 1);
             
-            // Only update visual elements while dragging
             elements.audio.progress.style.width = `${state.audio.dragPosition * 100}%`;
             
-            // Calculate time for display
             const time = state.audio.dragPosition * elements.audio.player.duration;
             const minutes = Math.floor(time / 60);
             const seconds = Math.floor(time % 60).toString().padStart(2, '0');
@@ -186,23 +183,6 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     /**
-     * Function to save game results to the server
-     */
-    function saveResultsToServer(accuracy, avgTime) {
-        const xhr = new XMLHttpRequest();
-        xhr.open('POST', './save_results.php', true); // Ensure the path is correct
-        xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
-        xhr.onreadystatechange = function () {
-            if (xhr.readyState === 4 && xhr.status === 200) {
-                console.log('Results saved:', xhr.responseText);
-            } else if (xhr.readyState === 4) {
-                console.error('Error saving results:', xhr.status, xhr.statusText);
-            }
-        };
-        xhr.send(`accuracy=${accuracy}&avgTime=${avgTime}`);
-    }
-
-    /**
      * Game Controller
      * Handles core game mechanics and UI updates
      */
@@ -213,13 +193,11 @@ document.addEventListener('DOMContentLoaded', function() {
         },
 
         attachListeners() {
-            // Fix bindings for event handlers
             elements.game.startButton.addEventListener('click', () => this.startGame());
             elements.game.target.addEventListener('click', () => this.handleTargetClick());
             elements.game.container.addEventListener('click', (e) => this.handleContainerClick(e));
             document.getElementById('restartGame').addEventListener('click', () => this.handleRestart());
             
-            // Add slider value update
             elements.game.clickLimit.addEventListener('input', (e) => {
                 const value = e.target.value;
                 document.getElementById('clickLimitValue').textContent = value;
@@ -227,7 +205,6 @@ document.addEventListener('DOMContentLoaded', function() {
                 e.target.style.setProperty('--progress', `${percent}%`);
             });
 
-            // Initialize slider value
             const initialValue = elements.game.clickLimit.value;
             const min = elements.game.clickLimit.min;
             const max = elements.game.clickLimit.max;
@@ -315,9 +292,6 @@ document.addEventListener('DOMContentLoaded', function() {
             elements.finalStats.accuracy.textContent = accuracy;
             elements.finalStats.time.textContent = avgTime;
 
-            // Save results to server
-            saveResultsToServer(accuracy, avgTime);
-
             elements.screens.gameOver.style.display = 'flex';
             requestAnimationFrame(() => {
                 elements.screens.gameOver.classList.add('active');
@@ -329,13 +303,11 @@ document.addEventListener('DOMContentLoaded', function() {
             setTimeout(() => {
                 elements.screens.gameOver.style.display = 'none';
                 
-                // Reset game state
                 state.game.clicks = 0;
                 state.game.active = false;
                 state.game.totalTime = 0;
                 state.game.totalAttempts = 0;
                 
-                // Reset UI
                 elements.game.clicks.textContent = '0';
                 elements.game.avgTime.textContent = '0';
                 elements.game.accuracy.textContent = '100';
@@ -355,7 +327,6 @@ document.addEventListener('DOMContentLoaded', function() {
             const targetHeight = elements.game.target.offsetHeight;
             
             const statsHeight = elements.game.stats.offsetHeight;
-            // Use 0 for settings height when hidden
             const settingsHeight = elements.game.settings.classList.contains('hidden') ? 0 : state.game.settingsHeight;
             const topOffset = statsHeight + padding;
             
