@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Page</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="swag.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <script src="script.js" defer></script>
+</head>
+<body>
+    <div id="customAudioPlayer">
+        <audio id="bgMusic">
+            <source src="fish.mp3" type="audio/mpeg">
+        </audio>
+        <button id="playPauseBtn">
+            <i class="fas fa-play"></i>
+        </button>
+        <div class="progress-bar">
+            <div class="progress"></div>
+        </div>
+        <div class="time">0:00</div>
+        <button id="muteBtn">
+            <i class="fas fa-volume-up"></i>
+        </button>
+    </div>
+    <div id="welcomeScreen">
+        <h1>Click Challenge</h1>
+        <button id="enterGame">Press to Begin</button>
+    </div>
+    <div id="gameContent" style="display: none;">
+        <h1 id="mainTitle">Click Challenge!</h1>
+        <p id="mainText">Test your speed and accuracy! Click the moving target as fast as you can.</p>
+        <div id="gameContainer">
+            <div id="stats">
+                <div class="stat">Clicks: <span id="clicks">0</span>/<span id="target-clicks">0</span></div>
+                <div class="stat">Time: <span id="avgTime">0</span>ms</div>
+                <div class="stat">Accuracy: <span id="accuracy">100</span>%</div>
+            </div>
+            <div id="settings">
+                <div class="settings-group">
+                    <div class="slider-container">
+                        <div class="slider-header">
+                            <i class="fas fa-bullseye"></i>
+                            <span>Target Clicks</span>
+                        </div>
+                        <input type="range" id="clickLimit" min="5" max="50" value="10" step="5">
+                        <div class="slider-value"><span id="clickLimitValue">10</span></div>
+                    </div>
+                </div>
+            </div>
+            <button id="target">Click Me!</button>
+            <button id="startGame">Start Game</button>
+        </div>
+        <div id="gameOverModal" class="modal">
+            <div class="modal-content">
+                <h2>Game Over!</h2>
+                <div class="final-stats">
+                    <div class="stat-item">
+                        <i class="fas fa-bullseye"></i>
+                        <span>Accuracy: <span id="finalAccuracy">0</span>%</span>
+                    </div>
+                    <div class="stat-item">
+                        <i class="fas fa-clock"></i>
+                        <span>Average Time: <span id="finalTime">0</span> ms</span>
+                    </div>
+                </div>
+                <button id="restartGame">Play Again?</button>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
